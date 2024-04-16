@@ -21,6 +21,11 @@ import MainComponent from './components/MainComponent.vue';
       }
     },
     methods:{
+      /**
+       *  setParams
+       *  setta i parametri per la chiamata e inoltra la chiamata api
+       *  passando i params
+       */
       setParams(){
         const options=  {};
         if(this.store.statusFilter){
@@ -30,8 +35,16 @@ import MainComponent from './components/MainComponent.vue';
         }
         this.getCharacters(options)  
       },
-      getCharacters(opt){
-        console.log(opt);
+     /**
+       * getCharacters methods
+       * @param {*} opt 
+       * chiamata api per recuperare i caratteri
+       * accetta un oggetto opzionale contenente eventuali parametri
+       * da passare in querystring
+       * 
+       */
+      getCharacters(opt=null){
+        //console.log(opt);
         this.store.loading = true;
         this.store.error.message = null;
         axios.get(this.store.apiUrl + this.store.endPoint.characters, opt).then((res) => {
@@ -47,7 +60,7 @@ import MainComponent from './components/MainComponent.vue';
       }
     },
     created(){
-      this.getCharacters(null);
+      this.getCharacters();
     }
   }
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <HeaderComponent />
+  
+  <HeaderComponent @statusSearch="setParams"/>
   <MainComponent />
 </template>
 
@@ -16,20 +17,29 @@ import MainComponent from './components/MainComponent.vue';
     },
     data(){
       return {
-        store
+        store,        
       }
     },
     methods:{
-      getCharacters(){
+      setParams(){
+        const options=  {};
+        if(this.store.statusFilter){
+          options.params = {
+            status: this.store.statusFilter
+          }
+        }
+        this.getCharacters(options)  
+      },
+      getCharacters(opt){
+        console.log(opt);
         this.store.loading = true;
         this.store.error.message = null;
-        axios.get(this.store.apiUrl + this.store.endPoint.characters).then((res) => {
+        axios.get(this.store.apiUrl + this.store.endPoint.characters, opt).then((res) => {
           this.store.characters = res.data.results;
           this.store.total = res.data.info.count;
-          //this.store.loading = false;
         }).catch((error) =>{
             // handle error
-           console.log(error);
+          //  console.log(error);
            this.store.error.message = error.message;
         }).finally(() =>{
           this.store.loading = false;
@@ -37,7 +47,7 @@ import MainComponent from './components/MainComponent.vue';
       }
     },
     created(){
-      this.getCharacters();
+      this.getCharacters(null);
     }
   }
 </script>
